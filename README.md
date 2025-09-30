@@ -75,3 +75,5 @@ State management using composables
 - Add unit tests, and e2e tests using playwright
 - Responsive
 - Add Cacheing mechanism
+- Add accessibility test results and lighthouse performance result
+  https://vueschool.io/articles/vuejs-tutorials/how-to-structure-a-large-scale-vue-js-application/
