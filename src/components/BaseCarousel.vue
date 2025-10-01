@@ -1,67 +1,7 @@
-<template>
-  <div class="carousel">
-    <h2 class="header" :id="ids.header">{{ header }}</h2>
-    <div
-      class="viewport"
-      ref="viewport"
-      role="region"
-      aria-roledescription="carousel"
-      :aria-labelledby="ids.header"
-      :aria-live="slides.length > effectivePerPage ? 'polite' : 'off'"
-      :aria-atomic="true"
-      :aria-busy="false"
-      :aria-controls="ids.track"
-      tabindex="0"
-      @keydown.left.prevent="prev"
-      @keydown.right.prevent="next"
-    >
-      <div
-        class="track"
-        :id="ids.track"
-        :style="{ transform: `translate3d(-${offsetPx}px, 0, 0)` }"
-      >
-        <div
-          class="slide"
-          v-for="s in slides"
-          :key="s.id"
-          :style="{ flexBasis: `${itemWidthPct}%` }"
-        >
-          <img
-            v-if="s.img?.medium || s.img?.original"
-            :src="s.img?.medium || s.img?.original"
-            :alt="s.alt || ''"
-            class="slide-img"
-          />
-        </div>
-      </div>
-
-      <button
-        class="nav left"
-        @click="prev"
-        :disabled="current === 0"
-        :aria-disabled="current === 0"
-        :aria-controls="ids.track"
-        aria-label="Previous"
-      >
-        ‹
-      </button>
-      <button
-        class="nav right"
-        @click="next"
-        :aria-disabled="current >= maxIndex"
-        :aria-controls="ids.track"
-        aria-label="Next"
-      >
-        ›
-      </button>
-    </div>
-  </div>
-</template>
-
 <script setup lang="ts">
 import { computed, onMounted, onBeforeUnmount, ref, watch, getCurrentInstance } from 'vue'
 
-const emit = defineEmits(['loadMore'])
+const emit = defineEmits(['loadMore', 'onImageClick'])
 
 export interface Slide {
   id: number
@@ -163,6 +103,67 @@ watch([slides, effectivePerPage], () => {
 })
 </script>
 
+<template>
+  <div class="carousel">
+    <h2 class="header" :id="ids.header">{{ header }}</h2>
+    <div
+      class="viewport"
+      ref="viewport"
+      role="region"
+      aria-roledescription="carousel"
+      :aria-labelledby="ids.header"
+      :aria-live="slides.length > effectivePerPage ? 'polite' : 'off'"
+      :aria-atomic="true"
+      :aria-busy="false"
+      :aria-controls="ids.track"
+      tabindex="0"
+      @keydown.left.prevent="prev"
+      @keydown.right.prevent="next"
+    >
+      <div
+        class="track"
+        :id="ids.track"
+        :style="{ transform: `translate3d(-${offsetPx}px, 0, 0)` }"
+      >
+        <div
+          class="slide"
+          v-for="s in slides"
+          :key="s.id"
+          :style="{ flexBasis: `${itemWidthPct}%` }"
+        >
+          <img
+            v-if="s.img?.medium || s.img?.original"
+            :src="s.img?.medium || s.img?.original"
+            :alt="s.alt || ''"
+            class="slide-img"
+            @click="$emit('onImageClick', s.id)"
+          />
+        </div>
+      </div>
+
+      <button
+        class="nav left"
+        @click="prev"
+        :disabled="current === 0"
+        :aria-disabled="current === 0"
+        :aria-controls="ids.track"
+        aria-label="Previous"
+      >
+        ‹
+      </button>
+      <button
+        class="nav right"
+        @click="next"
+        :aria-disabled="current >= maxIndex"
+        :aria-controls="ids.track"
+        aria-label="Next"
+      >
+        ›
+      </button>
+    </div>
+  </div>
+</template>
+
 <style scoped>
 .carousel {
   width: 100%;
@@ -171,6 +172,7 @@ watch([slides, effectivePerPage], () => {
   margin: 0 0 8px;
   font: inherit;
   font-weight: 600;
+  color: #fff;
 }
 
 .viewport {

@@ -4,7 +4,7 @@ import ShowView from '@/views/ShowView.vue'
 
 const routes = [
   { path: '/', component: HomeView },
-  { path: '/show/:id', component: ShowView },
+  { name: 'show', path: '/show/:id', component: ShowView },
 ]
 
 const router = createRouter({
