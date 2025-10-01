@@ -22,15 +22,6 @@ async function getShows(page = 1): Promise<TVMazeShow[]> {
   return (await res.json()) as TVMazeShow[]
 }
 
-//TODO: might be nice to have have a filter later
-
-// const filteredShowsByGenre = computed<TVMazeShow[]>(() => {
-//   if (selectedGenre.value) {
-//     return fetchedShows.value.filter((show) => show.genres.includes(selectedGenre.value))
-//   }
-//   return fetchedShows.value
-// })
-
 function createGroupedByGenre(): GroupedByGenre {
   return Object.fromEntries(TVMAZE_GENRES.map((g) => [g, [] as FormattedShow[]])) as GroupedByGenre
 }
@@ -60,6 +51,10 @@ const onShowClicked = (id: string) => {
 onMounted(async () => {
   fetchedShows.value = await getShows()
 })
+
+const loadMoreData = () => {
+  console.log('shoulw load more!')
+}
 </script>
 
 <template>
@@ -79,6 +74,7 @@ onMounted(async () => {
       :header="key"
       :slides="value"
       @slideClicked="onShowClicked"
+      @loadMore="loadMoreData"
     />
   </template>
 </template>

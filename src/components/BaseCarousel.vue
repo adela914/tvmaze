@@ -1,13 +1,24 @@
 <template>
   <div class="carousel">
-    <h2 class="header">{{ header }}</h2>
-
-    <div class="viewport" ref="viewport">
+    <h2 class="header" :id="ids.header">{{ header }}</h2>
+    <div
+      class="viewport"
+      ref="viewport"
+      role="region"
+      aria-roledescription="carousel"
+      :aria-labelledby="ids.header"
+      :aria-live="slides.length > effectivePerPage ? 'polite' : 'off'"
+      :aria-atomic="true"
+      :aria-busy="false"
+      :aria-controls="ids.track"
+      tabindex="0"
+      @keydown.left.prevent="prev"
+      @keydown.right.prevent="next"
+    >
       <div
         class="track"
+        :id="ids.track"
         :style="{ transform: `translate3d(-${offsetPx}px, 0, 0)` }"
-        role="region"
-        aria-roledescription="carousel"
       >
         <div
           class="slide"
@@ -24,10 +35,23 @@
         </div>
       </div>
 
-      <button class="nav left" @click="prev" :disabled="current === 0" aria-label="Previous">
+      <button
+        class="nav left"
+        @click="prev"
+        :disabled="current === 0"
+        :aria-disabled="current === 0"
+        :aria-controls="ids.track"
+        aria-label="Previous"
+      >
         ‹
       </button>
-      <button class="nav right" @click="next" :disabled="current >= maxIndex" aria-label="Next">
+      <button
+        class="nav right"
+        @click="next"
+        :aria-disabled="current >= maxIndex"
+        :aria-controls="ids.track"
+        aria-label="Next"
+      >
         ›
       </button>
     </div>
@@ -35,11 +59,13 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, onBeforeUnmount, ref, watch } from 'vue'
+import { computed, onMounted, onBeforeUnmount, ref, watch, getCurrentInstance } from 'vue'
+
+const emit = defineEmits(['loadMore'])
 
 export interface Slide {
   id: number
-  img?: { medium: string; original: string }
+  img?: { medium?: string; original?: string } // (type-only loosen; runtime unchanged)
   alt?: string
 }
 
@@ -64,6 +90,13 @@ const props = defineProps<{
 
 const slides = computed(() => props.slides)
 
+// unique ids for a11y wiring
+const uid = getCurrentInstance()?.uid ?? Math.floor(Math.random() * 1e9)
+const ids = {
+  header: `carousel-${uid}-header`,
+  track: `carousel-${uid}-track`,
+}
+
 // viewport width tracking
 const viewport = ref<HTMLElement | null>(null)
 const vw = ref(0)
@@ -83,7 +116,10 @@ onMounted(() => {
 })
 onBeforeUnmount(() => {
   window.removeEventListener('resize', measure)
-  if (ro && viewport.value) ro.disconnect()
+  if (ro) {
+    ro.disconnect()
+    ro = null
+  }
 })
 
 // compute responsive perPage (or respect fixed prop)
@@ -111,6 +147,9 @@ const offsetPx = computed(() => {
 })
 
 function next() {
+  if (current.value >= maxIndex.value) {
+    emit('loadMore')
+  }
   current.value = Math.min(current.value + effectivePerPage.value, maxIndex.value)
 }
 function prev() {
@@ -137,6 +176,7 @@ watch([slides, effectivePerPage], () => {
   position: relative;
   width: 100%;
   overflow: hidden;
+  outline: none; /* rely on internal controls + focus-visible */
 }
 
 .track {
@@ -156,7 +196,8 @@ watch([slides, effectivePerPage], () => {
   display: block;
   width: 100%;
   height: auto;
-  max-width: 250px;
+  max-width: 250px; /* existing cap preserved */
+  margin: 0 auto; /* center when capped to avoid left gap */
   object-fit: cover;
 }
 
@@ -185,5 +226,10 @@ watch([slides, effectivePerPage], () => {
 .nav:disabled {
   opacity: 0.4;
   cursor: default;
+}
+/* Visible keyboard focus without changing layout */
+.nav:focus-visible {
+  outline: 2px solid white;
+  outline-offset: 2px;
 }
 </style>
