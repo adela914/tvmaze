@@ -10,12 +10,8 @@ const onShowClicked = (id: number) => {
 </script>
 
 <template>
-  <p v-if="!searchShowsStore.searchResults.length">
-    There is no such a movie. What about tho exploring these trending movies?
-  </p>
-  <div v-else>
-    <h2>Search results:</h2>
-    <template v-for="show in searchShowsStore.searchResults">
+  <div class="container">
+    <template v-for="show in searchShowsStore.searchResults" :key="show.id">
       <img
         v-if="show.image?.medium || show.image?.original"
         :src="show.image?.medium || show.image?.original"
@@ -26,3 +22,12 @@ const onShowClicked = (id: number) => {
     </template>
   </div>
 </template>
+
+<style scoped>
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: left;
+  gap: 1em;
+}
+</style>

@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import BaseInput from '@/components/BaseInput.vue'
 import { useShowSearchStore } from '@/stores/searchShowsStore'
+import { debounce } from '@/utils'
 
 const searchStore = useShowSearchStore()
+
+const debouncedFind = debounce(() => searchStore.findShows(), 400)
 const onInputUpdate = (input: string) => {
   searchStore.searchInput = input
-  searchStore.findShows()
+  debouncedFind()
 }
 </script>
 

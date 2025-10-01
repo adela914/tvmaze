@@ -71,3 +71,9 @@ const loadMoreData = async () => {
     </template>
   </main>
 </template>
+
+<style scoped>
+main {
+  margin: 40px;
+}
+</style>
