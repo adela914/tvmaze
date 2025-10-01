@@ -4,13 +4,17 @@ import { TVMAZE_GENRES } from '@/constants'
 import BaseCrousel, { type Slide } from '@/components/BaseCarousel.vue'
 import { useShowsStore } from '@/stores/showsStore'
 import router from '@/router'
+import TheHeader from '@/components/TheHeader.vue'
+import { useShowSearchStore } from '@/stores/searchShowsStore'
+import SearchResultBlock from '@/components/SearchResultBlock.vue'
 
 // types
 type TVMazeGenre = (typeof TVMAZE_GENRES)[number]
 type FormattedShow = Slide
 type GroupedByGenre = Record<TVMazeGenre, FormattedShow[]>
 
-const store = useShowsStore()
+const showsStore = useShowsStore()
+const searchShowsStore = useShowSearchStore()
 
 function createGroupedByGenre(): GroupedByGenre {
   return Object.fromEntries(TVMAZE_GENRES.map((g) => [g, [] as FormattedShow[]])) as GroupedByGenre
@@ -19,7 +23,7 @@ function createGroupedByGenre(): GroupedByGenre {
 const groupedByGenre = computed<GroupedByGenre>(() => {
   const groupedShows = createGroupedByGenre()
 
-  store.shows.forEach((show) => {
+  showsStore.shows.forEach((show) => {
     show.genres.forEach((genre) => {
       if ((TVMAZE_GENRES as readonly string[]).includes(genre)) {
         groupedShows[genre as TVMazeGenre].push({
@@ -39,25 +43,31 @@ const onShowClicked = (id: string) => {
 }
 
 onMounted(async () => {
-  await store.fetchShows()
+  await showsStore.fetchShows()
 })
 
 const loadMoreData = async () => {
-  await store.fetchShows()
+  await showsStore.fetchShows()
 }
 </script>
 
 <template>
+  <TheHeader />
   <!-- Only render non-empty groups-->
-  <template v-for="(value, key) in groupedByGenre">
-    <BaseCrousel
-      :key="key"
-      v-if="value.length"
-      :header="key"
-      :slides="value"
-      :isLoading="store.isLoading"
-      @onImageClick="onShowClicked"
-      @loadMore="loadMoreData"
-    />
-  </template>
+  <main>
+    <SearchResultBlock v-if="searchShowsStore.searchInput" />
+    <template v-else>
+      <template v-for="(value, key) in groupedByGenre">
+        <BaseCrousel
+          :key="key"
+          v-if="value.length"
+          :header="key"
+          :slides="value"
+          :isLoading="showsStore.isLoading"
+          @onImageClick="onShowClicked"
+          @loadMore="loadMoreData"
+        />
+      </template>
+    </template>
+  </main>
 </template>

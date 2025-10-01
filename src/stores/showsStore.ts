@@ -1,6 +1,14 @@
+import getShows from '@/api/getShows'
 import type { TVMazeShow } from '@/types/TVMazeShow'
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
+
+export function indexShowsById(shows: TVMazeShow[]): Record<string, TVMazeShow> {
+  return shows.reduce<Record<string, TVMazeShow>>((acc, show) => {
+    acc[show.id.toString()] = show
+    return acc
+  }, {})
+}
 
 export const useShowsStore = defineStore('shows', () => {
   const shows = ref<TVMazeShow[]>([])
@@ -13,12 +21,7 @@ export const useShowsStore = defineStore('shows', () => {
     error.value = null
 
     try {
-      const response = await fetch(`https://api.tvmaze.com/shows?page=${currentPage.value}`)
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`)
-      }
-
-      const fetchedShows: TVMazeShow[] = await response.json()
+      const fetchedShows: TVMazeShow[] = await getShows(currentPage.value)
       shows.value = [...shows.value, ...fetchedShows]
       currentPage.value++
     } catch (err) {
@@ -30,10 +33,13 @@ export const useShowsStore = defineStore('shows', () => {
     }
   }
 
+  const showsObjectById = computed(() => indexShowsById(shows.value))
+
   return {
     shows,
     isLoading,
     error,
     fetchShows,
+    showsObjectById,
   }
 })

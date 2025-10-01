@@ -1,15 +1,19 @@
 <script setup lang="ts">
 import BaseInput from '@/components/BaseInput.vue'
-import { ref } from 'vue'
+import { useShowSearchStore } from '@/stores/searchShowsStore'
 
-const searchValue = ref('')
+const searchStore = useShowSearchStore()
+const onInputUpdate = (input: string) => {
+  searchStore.searchInput = input
+  searchStore.findShows()
+}
 </script>
 
 <template>
   <header class="header">
     <div class="container">
       <h1>TVMaze</h1>
-      <BaseInput v-model="searchValue" placeholder="Search..." />
+      <BaseInput @update:model-value="onInputUpdate" placeholder="Search..." />
     </div>
   </header>
 </template>

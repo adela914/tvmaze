@@ -1,16 +1,6 @@
-<script setup lang="ts">
-import TheHeader from '@/components/TheHeader.vue'
-</script>
+<script setup lang="ts"></script>
 
 <template>
-  <TheHeader />
-  <main>
-    <RouterView />
-  </main>
+  <RouterView />
 </template>
-<style scoped>
-main {
-  margin: 60px 45px;
-  /* use variables here */
-}
-</style>
+<style></style>

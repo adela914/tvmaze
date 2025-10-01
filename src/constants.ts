@@ -1,3 +1,5 @@
+export const BASE_API_URL = 'https://api.tvmaze.com/'
+
 //This is the list based on the documentation of tvmaze. https://www.tvmaze.com/faq/32/genre-definitions
 export const TVMAZE_GENRES = [
   'Action',
