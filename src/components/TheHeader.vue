@@ -5,6 +5,7 @@
 </template>
 
 <style scoped>
+/* TODO: Stick to top */
 .header {
   top: 0;
   width: 100%;

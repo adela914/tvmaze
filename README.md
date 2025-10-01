@@ -77,3 +77,7 @@ State management using composables
 - Add Cacheing mechanism
 - Add accessibility test results and lighthouse performance result
   https://vueschool.io/articles/vuejs-tutorials/how-to-structure-a-large-scale-vue-js-application/
+
+TODO:
+Back to top
+Automatically swipes pictures
