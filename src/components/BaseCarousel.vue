@@ -86,6 +86,7 @@ const props = defineProps<{
   /** Responsive rules sorted by minWidth ascending; falls back to DEFAULT_BREAKPOINTS */
   breakpoints?: Breakpoint[]
   header: string
+  isLoading: boolean
 }>()
 
 const slides = computed(() => props.slides)

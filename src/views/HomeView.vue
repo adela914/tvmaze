@@ -1,26 +1,17 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
-import BaseDropdown from '@/components/BaseDropdown.vue'
+import { computed, onMounted } from 'vue'
 import { TVMAZE_GENRES } from '@/constants'
 import BaseCrousel, { type Slide } from '@/components/BaseCarousel.vue'
-import type { TVMazeShow } from '@/types/TVMazeShow'
+import { useShowsStore } from '@/stores/showsStore'
 
 // types
 type TVMazeGenre = (typeof TVMAZE_GENRES)[number]
 type FormattedShow = Slide
 type GroupedByGenre = Record<TVMazeGenre, FormattedShow[]>
 
-// reactive values
-const fetchedShows = ref<TVMazeShow[]>([])
-const selectedGenre = ref<string>('')
+const store = useShowsStore()
 
-//TODO: Move it to store
-//Make it as an object to read
-async function getShows(page = 1): Promise<TVMazeShow[]> {
-  const res = await fetch(`https://api.tvmaze.com/shows?page=${page}`)
-  if (!res.ok) throw new Error(`HTTP ${res.status}`)
-  return (await res.json()) as TVMazeShow[]
-}
+// const selectedGenre = ref<string>('')
 
 function createGroupedByGenre(): GroupedByGenre {
   return Object.fromEntries(TVMAZE_GENRES.map((g) => [g, [] as FormattedShow[]])) as GroupedByGenre
@@ -29,7 +20,7 @@ function createGroupedByGenre(): GroupedByGenre {
 const groupedByGenre = computed<GroupedByGenre>(() => {
   const groupedShows = createGroupedByGenre()
 
-  fetchedShows.value.forEach((show) => {
+  store.shows.forEach((show) => {
     show.genres.forEach((genre) => {
       if ((TVMAZE_GENRES as readonly string[]).includes(genre)) {
         groupedShows[genre as TVMazeGenre].push({
@@ -49,23 +40,23 @@ const onShowClicked = (id: string) => {
 }
 
 onMounted(async () => {
-  fetchedShows.value = await getShows()
+  await store.fetchShows()
 })
 
-const loadMoreData = () => {
-  console.log('shoulw load more!')
+const loadMoreData = async () => {
+  await store.fetchShows()
 }
 </script>
 
 <template>
-  <BaseDropdown
+  <!-- <BaseDropdown
     name="genres"
     v-model="selectedGenre"
     id="genres"
     placeholder="All genres"
     label="Choose a genre"
     :options="TVMAZE_GENRES"
-  />
+  /> -->
   <!-- Only render non-empty groups-->
   <template v-for="(value, key) in groupedByGenre">
     <BaseCrousel
@@ -73,6 +64,7 @@ const loadMoreData = () => {
       v-if="value.length"
       :header="key"
       :slides="value"
+      :isLoading="store.isLoading"
       @slideClicked="onShowClicked"
       @loadMore="loadMoreData"
     />
