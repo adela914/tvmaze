@@ -1,12 +1,21 @@
 <script setup lang="ts">
 import { computed, onMounted, onBeforeUnmount, ref, watch, getCurrentInstance } from 'vue'
-
 const emit = defineEmits(['loadMore', 'onImageClick'])
 
 export interface Slide {
   id: number
-  img?: { medium?: string; original?: string } // (type-only loosen; runtime unchanged)
+  img?: { medium?: string; original?: string }
   alt?: string
+}
+
+interface BaseCarouselProps {
+  slides: Slide[]
+  /** Fixed number of items per page (disables responsive behavior if provided) */
+  perPage?: number
+  /** Responsive rules sorted by minWidth ascending; falls back to DEFAULT_BREAKPOINTS */
+  breakpoints?: Breakpoint[]
+  header: string
+  isLoading: boolean
 }
 
 type Breakpoint = { minWidth: number; perPage: number }
@@ -19,15 +28,7 @@ const DEFAULT_BREAKPOINTS: Breakpoint[] = [
   { minWidth: 1280, perPage: 6 },
 ]
 
-const props = defineProps<{
-  slides: Slide[]
-  /** Fixed number of items per page (disables responsive behavior if provided) */
-  perPage?: number
-  /** Responsive rules sorted by minWidth ascending; falls back to DEFAULT_BREAKPOINTS */
-  breakpoints?: Breakpoint[]
-  header: string
-  isLoading: boolean
-}>()
+const props = defineProps<BaseCarouselProps>()
 
 const slides = computed(() => props.slides)
 
@@ -202,6 +203,7 @@ watch([slides, effectivePerPage], () => {
   max-width: 250px; /* existing cap preserved */
   margin: 0 auto; /* center when capped to avoid left gap */
   object-fit: cover;
+  border-radius: 10px;
 }
 
 .nav {

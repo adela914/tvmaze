@@ -81,3 +81,5 @@ State management using composables
 TODO:
 Back to top
 Automatically swipes pictures
+use either px or em
+Add css variables for colors and spacing, fonts

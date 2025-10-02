@@ -2,7 +2,7 @@
 import { computed, onMounted } from 'vue'
 import { TVMAZE_GENRES } from '@/constants'
 import BaseCrousel, { type Slide } from '@/components/BaseCarousel.vue'
-import { useShowsStore } from '@/stores/showsStore'
+import { useShowsStore } from '@/stores/showsListStore'
 import router from '@/router'
 import TheHeader from '@/components/TheHeader.vue'
 import { useShowSearchStore } from '@/stores/searchShowsStore'
@@ -43,7 +43,9 @@ const onShowClicked = (id: string) => {
 }
 
 onMounted(async () => {
-  await showsStore.fetchShows()
+  if (showsStore.shows.length === 0) {
+    await showsStore.fetchShows()
+  }
 })
 
 const loadMoreData = async () => {

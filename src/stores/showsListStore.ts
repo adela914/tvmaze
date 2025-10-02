@@ -1,4 +1,4 @@
-import getShows from '@/api/getShows'
+import getShows from '@/api/getShowsList'
 import type { TVMazeShow } from '@/types/TVMazeShow'
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
