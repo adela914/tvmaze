@@ -34,7 +34,7 @@ const onShowClicked = (id: number) => {
 }
 
 .image {
-  border-radius: 10px;
+  border-radius: var(--border-radius-md);
   object-fit: cover;
   width: 100%;
   height: auto;

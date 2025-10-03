@@ -16,13 +16,6 @@
   --text-4xl: 3rem; /* 48px */
   --text-5xl: 3.75rem; /* 60px */
 
-  /* line heights + weights (added) */
-  --leading-body: 1.5;
-  --leading-heading: 1.2;
-  --weight-regular: 400;
-  --weight-semibold: 600;
-  --weight-bold: 700;
-
   /* colors */
   --black: #000000;
   --background: #333;
@@ -38,6 +31,13 @@
   --space-lg: 2rem; /* 32px */
   --space-xl: 3.25rem; /* 52px */
   --space-xxl: 5.25rem; /* 84px */
+
+  /* Border radius */
+  --border-radius-xs: 6px;
+  --border-radius-sm: 8px;
+  --border-radius-md: 10px;
+  --border-radius-lg: 12px;
+  --border-radius-xl: 20px;
 }
 
 * {

@@ -77,7 +77,7 @@ onMounted(() => {
 .poster {
   flex-shrink: 0;
   width: 300px;
-  border-radius: 12px;
+  border-radius: var(--border-radius-lg);
   overflow: hidden;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
 }
@@ -115,7 +115,7 @@ onMounted(() => {
 .badge {
   background: rgba(255, 255, 255, 0.15);
   padding: 4px 10px;
-  border-radius: 20px;
+  border-radius: var(--border-radius-xl);
   font-size: 0.85rem;
 }
 

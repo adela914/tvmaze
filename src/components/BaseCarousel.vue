@@ -218,7 +218,7 @@ watch([() => slides.value.length, () => props.isLoading], ([len, loading]) => {
   max-width: 250px;
   margin: 0 auto;
   object-fit: cover;
-  border-radius: 10px;
+  border-radius: var(--border-radius-md);
   cursor: pointer;
 }
 
@@ -243,7 +243,7 @@ watch([() => slides.value.length, () => props.isLoading], ([len, loading]) => {
   line-height: 38px;
   text-align: center;
   font-size: 24px;
-  border-radius: 9999px;
+  border-radius: 9999px; /* unique radius for naviataion buttons */
   cursor: pointer;
   user-select: none;
 }

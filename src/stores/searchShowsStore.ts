@@ -2,6 +2,7 @@ import getSearchShows from '@/api/getSearchShows'
 import type { TVMazeShow } from '@/types/TVMazeShow'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
+import { useToastStore } from './toasterStore'
 
 export const useShowSearchStore = defineStore('showSearch', () => {
   const searchResults = ref<TVMazeShow[]>([])
@@ -17,8 +18,11 @@ export const useShowSearchStore = defineStore('showSearch', () => {
       const result = await getSearchShows(searchInput.value)
       searchResults.value = result
     } catch (e) {
+      const toastStore = useToastStore()
       const err = e as Error
       error.value = err.message
+
+      toastStore.show(error.value)
     } finally {
       isLoading.value = false
     }

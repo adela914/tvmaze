@@ -2,6 +2,7 @@ import getShows from '@/api/getShowsList'
 import type { TVMazeShow } from '@/types/TVMazeShow'
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
+import { useToastStore } from './toasterStore'
 
 export function indexShowsById(shows: TVMazeShow[]): Record<string, TVMazeShow> {
   return shows.reduce<Record<string, TVMazeShow>>((acc, show) => {
@@ -24,8 +25,11 @@ export const useShowsStore = defineStore('shows', () => {
       shows.value = [...shows.value, ...fetchedShows]
       currentPage.value++
     } catch (err) {
+      const toastStore = useToastStore()
       error.value = err instanceof Error ? err.message : 'Failed to fetch tasks'
       console.error('Error fetching tasks:', err)
+
+      toastStore.show(error.value)
       throw err
     } finally {
       isLoading.value = false

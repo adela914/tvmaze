@@ -3,6 +3,7 @@ import type { TVMazeShow } from '@/types/TVMazeShow'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { useShowsStore } from './showsListStore'
+import { useToastStore } from './toasterStore'
 
 export const useShowDetailsStore = defineStore('showDetailsStore', () => {
   const showDetails = ref<TVMazeShow>()
@@ -25,8 +26,11 @@ export const useShowDetailsStore = defineStore('showDetailsStore', () => {
         const result = await getShowById(id)
         showDetails.value = result
       } catch (e) {
+        const toastStore = useToastStore()
+
         const err = e as Error
         error.value = err.message
+        toastStore.show(error.value)
       }
     }
     isLoading.value = false

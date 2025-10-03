@@ -31,23 +31,23 @@ const onInputUpdate = (input: string) => {
 .container {
   display: flex;
   align-items: center;
-  justify-content: center; /* centers the input */
+  justify-content: center;
   position: relative;
   margin: 0 50px;
 }
 
 .container h1 {
   position: absolute;
-  left: 0; /* stick to the left */
+  left: 0;
   margin: 0;
 }
 
 .container input {
-  width: 40%; /* adjust as needed */
+  width: 40%;
   max-width: 400px;
   padding: 0.5rem 1rem;
   font-size: 1rem;
-  border-radius: 6px;
+  border-radius: var(--border-radius-xs);
   border: 1px solid #ccc;
 }
 </style>
