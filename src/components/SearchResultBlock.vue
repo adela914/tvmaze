@@ -30,7 +30,7 @@ const onShowClicked = (id: number) => {
   display: flex;
   flex-wrap: wrap;
   justify-content: left;
-  gap: 1em;
+  gap: var(--space-sm);
 }
 
 .image {

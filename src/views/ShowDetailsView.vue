@@ -15,19 +15,16 @@ onMounted(() => {
 
 <template>
   <main v-if="showData && !showDetailsStore.isLoading" class="hero">
-    <!-- backdrop -->
     <div
       class="backdrop"
       :style="{ backgroundImage: `url(${showData.image?.original || showData.image?.medium})` }"
     ></div>
 
     <div class="overlay">
-      <!-- poster -->
       <div class="poster">
         <img class="image" :src="showData?.image?.medium" :alt="showData?.name" />
       </div>
 
-      <!-- details -->
       <div class="details">
         <h1>{{ showData.name }}</h1>
         <p class="meta">
@@ -68,7 +65,7 @@ onMounted(() => {
 .overlay {
   display: flex;
   gap: 32px;
-  padding: 40px;
+  padding: var(--space-xl);
   max-width: 1200px;
   margin: auto;
   width: 100%;
@@ -92,42 +89,41 @@ onMounted(() => {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--space-md);
 }
 
 .details h1 {
   margin: 0;
-  font-size: 2.4rem;
   line-height: 1.2;
 }
 
 .meta {
   color: #ddd;
-  font-size: 1rem;
+  font-size: var(--text-base);
 }
 
 .genres {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: var(--space-xs);
 }
 
 .badge {
   background: rgba(255, 255, 255, 0.15);
   padding: 4px 10px;
   border-radius: var(--border-radius-xl);
-  font-size: 0.85rem;
+  font-size: var(--text-sm);
 }
 
 .summary {
   max-width: 700px;
   line-height: 1.6;
-  color: #eee;
+  color: var(--color-text);
 }
 
 .extra {
   font-size: 0.9rem;
-  color: #ccc;
+  color: var(--color-text-muted);
 }
 
 /* Responsive */

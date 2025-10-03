@@ -25,7 +25,7 @@ const onInputUpdate = (input: string) => {
 .header {
   background: #222;
   color: var(--color-text);
-  padding: 1rem 0;
+  padding: var(--space-sm);
 }
 
 .container {
@@ -33,21 +33,12 @@ const onInputUpdate = (input: string) => {
   align-items: center;
   justify-content: center;
   position: relative;
-  margin: 0 50px;
+  margin: 0 var(--space-lg);
 }
 
 .container h1 {
   position: absolute;
   left: 0;
   margin: 0;
-}
-
-.container input {
-  width: 40%;
-  max-width: 400px;
-  padding: 0.5rem 1rem;
-  font-size: 1rem;
-  border-radius: var(--border-radius-xs);
-  border: 1px solid #ccc;
 }
 </style>
