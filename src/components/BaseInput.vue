@@ -3,10 +3,8 @@ import { computed, useAttrs, useSlots } from 'vue'
 
 defineOptions({ inheritAttrs: false }) // ensure attrs go to <input>, not wrapper
 
-// v-model for the component (transparent)
 const model = defineModel<string>({ default: '' })
 
-// optional external id support; otherwise auto-id for <label for="">
 defineProps<{ inputId?: string }>()
 
 const attrs = useAttrs()
@@ -15,9 +13,8 @@ const hasLabel = computed(() => !!useSlots().default)
 
 <template>
   <div class="field">
-    <!-- optional label via default slot -->
     <label v-if="hasLabel" class="label" :for="inputId"><slot /></label>
-    <input class="input" :id="inputId" v-model="model" v-bind="attrs" />
+    <input :id="inputId" v-model="model" v-bind="attrs" type="text" />
   </div>
 </template>
 

@@ -78,8 +78,22 @@ State management using composables
 - Add accessibility test results and lighthouse performance result
   https://vueschool.io/articles/vuejs-tutorials/how-to-structure-a-large-scale-vue-js-application/
 
-TODO:
-Back to top
-Automatically swipes pictures
-use either px or em
-Add css variables for colors and spacing, fonts
+### State management
+
+### Usage of base components
+
+```
+BaseInput.vue
+
+<!-- With label (slot) -->
+<BaseInput v-model="email" type="email" name="email" autocomplete="email" placeholder="you@example.com">
+  Email
+</BaseInput>
+
+<!-- Without label: provide aria-label -->
+<BaseInput v-model="q" placeholder="Search…" aria-label="Search" />
+
+<!-- Need numbers? Use the modifier at call site -->
+
+<BaseInput v-model.number="age" type="number">Age</BaseInput>
+```

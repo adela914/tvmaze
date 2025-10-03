@@ -16,29 +16,34 @@ const onInputUpdate = (input: string) => {
   <header class="header">
     <div class="container">
       <h1>TVMaze</h1>
-      <BaseInput @update:model-value="onInputUpdate" placeholder="Search..." />
+      <BaseInput
+        class="input-wrapper"
+        input-id="searchInput"
+        @update:model-value="onInputUpdate"
+        placeholder="Search..."
+      />
+      <div class="spacer"></div>
     </div>
   </header>
 </template>
 
 <style scoped>
 .header {
-  background: #222;
+  background: var(--black);
   color: var(--color-text);
   padding: var(--space-sm);
 }
 
 .container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
   position: relative;
   margin: 0 var(--space-lg);
+  display: flex;
+  align-items: center;
 }
 
-.container h1 {
-  position: absolute;
-  left: 0;
-  margin: 0;
+h1,
+.spacer,
+.input-wrapper {
+  flex: 1;
 }
 </style>
