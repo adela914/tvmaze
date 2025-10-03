@@ -13,11 +13,13 @@ const onShowClicked = (id: number) => {
   <div class="container">
     <template v-for="show in searchShowsStore.searchResults" :key="show.id">
       <img
+        class="image"
         v-if="show.image?.medium || show.image?.original"
         :src="show.image?.medium || show.image?.original"
         :alt="show.name"
         :key="show.id"
         @click="onShowClicked(show.id)"
+        loading="lazy"
       />
     </template>
   </div>
@@ -29,5 +31,13 @@ const onShowClicked = (id: number) => {
   flex-wrap: wrap;
   justify-content: left;
   gap: 1em;
+}
+
+.image {
+  border-radius: 10px;
+  object-fit: cover;
+  width: 100%;
+  height: auto;
+  max-width: 250px;
 }
 </style>

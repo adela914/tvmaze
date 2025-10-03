@@ -42,7 +42,7 @@ const ids = {
 // viewport width tracking
 const viewport = ref<HTMLElement | null>(null)
 const vw = ref(0)
-function measure() {
+const measure = () => {
   // prefer container width for container-query–like behavior
   vw.value = viewport.value?.clientWidth ?? (typeof window !== 'undefined' ? window.innerWidth : 0)
 }
@@ -88,19 +88,34 @@ const offsetPx = computed(() => {
   return (current.value / effectivePerPage.value) * vw.value
 })
 
-function next() {
-  if (current.value >= maxIndex.value) {
-    emit('loadMore')
+const advanceAfterLoad = ref(false)
+const lastLen = ref(slides.value.length)
+
+const next = () => {
+  if (current.value < maxIndex.value) {
+    current.value = Math.min(current.value + effectivePerPage.value, maxIndex.value)
+    return
   }
-  current.value = Math.min(current.value + effectivePerPage.value, maxIndex.value)
+  // at end → ask parent for more and remember to advance after it lands
+  advanceAfterLoad.value = true
+  emit('loadMore')
 }
-function prev() {
+const prev = () => {
   current.value = Math.max(current.value - effectivePerPage.value, 0)
 }
 
 // keep index valid when inputs change
 watch([slides, effectivePerPage], () => {
   if (current.value > maxIndex.value) current.value = maxIndex.value
+})
+
+watch([() => slides.value.length, () => props.isLoading], ([len, loading]) => {
+  // only act when we were waiting, loading finished, and we actually got more items
+  if (advanceAfterLoad.value && !loading && len > lastLen.value) {
+    current.value = Math.min(current.value + effectivePerPage.value, maxIndex.value)
+    advanceAfterLoad.value = false
+  }
+  lastLen.value = len
 })
 </script>
 
@@ -137,11 +152,12 @@ watch([slides, effectivePerPage], () => {
             :src="s.img?.medium || s.img?.original"
             :alt="s.alt || ''"
             class="slide-img"
+            :class="{ isLoading }"
             @click="$emit('onImageClick', s.id)"
+            loading="lazy"
           />
         </div>
       </div>
-
       <button
         class="nav left"
         @click="prev"
@@ -168,26 +184,25 @@ watch([slides, effectivePerPage], () => {
 <style scoped>
 .carousel {
   width: 100%;
+  display: flex;
+  flex-direction: column;
 }
 .header {
-  margin: 0 0 8px;
-  font: inherit;
-  font-weight: 600;
-  color: #fff;
+  margin: var(--space-sm);
 }
 
 .viewport {
   position: relative;
   width: 100%;
   overflow: hidden;
-  outline: none; /* rely on internal controls + focus-visible */
+  outline: none;
 }
 
 .track {
   display: flex;
   transition: transform 300ms ease;
   will-change: transform;
-  justify-content: flex-start; /* always left-aligned */
+  justify-content: flex-start;
 }
 
 .slide {
@@ -200,10 +215,20 @@ watch([slides, effectivePerPage], () => {
   display: block;
   width: 100%;
   height: auto;
-  max-width: 250px; /* existing cap preserved */
-  margin: 0 auto; /* center when capped to avoid left gap */
+  max-width: 250px;
+  margin: 0 auto;
   object-fit: cover;
   border-radius: 10px;
+  cursor: pointer;
+}
+
+.slide-img.isLoading {
+  filter: grayscale(100%) brightness(80%);
+  opacity: 0.6;
+  pointer-events: none;
+  transition:
+    filter 0.3s ease,
+    opacity 0.3s ease;
 }
 
 .nav {
@@ -212,7 +237,7 @@ watch([slides, effectivePerPage], () => {
   transform: translateY(-50%);
   border: none;
   background: rgba(0, 0, 0, 0.5);
-  color: #fff;
+  color: var(--color-text);
   width: 40px;
   height: 40px;
   line-height: 38px;

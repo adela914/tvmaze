@@ -27,10 +27,9 @@ export const useShowDetailsStore = defineStore('showDetailsStore', () => {
       } catch (e) {
         const err = e as Error
         error.value = err.message
-      } finally {
-        isLoading.value = false
       }
     }
+    isLoading.value = false
   }
 
   return { showDetails, isLoading, error, fetchShowById }

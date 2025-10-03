@@ -1,11 +1,43 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
 :root {
-  /* --primary: #3686a8;
-  --business: #a19b58;
-  --personal: var(--primary);
-  --light: #eee;
-  --danger: #ff5b57; */
+  /* typography */
+  --font-base: 'Inter', system-ui, -apple-system, sans-serif;
+
+  /* Font sizes */
+  --text-xs: 0.75rem; /* 12px */
+  --text-sm: 0.875rem; /* 14px */
+  --text-base: 1rem; /* 16px */
+  --text-md: 1.125rem; /* 18px */
+  --text-lg: 1.25rem; /* 20px */
+  --text-xl: 1.5rem; /* 24px */
+  --text-2xl: 1.875rem; /* 30px */
+  --text-3xl: 2.25rem; /* 36px */
+  --text-4xl: 3rem; /* 48px */
+  --text-5xl: 3.75rem; /* 60px */
+
+  /* line heights + weights (added) */
+  --leading-body: 1.5;
+  --leading-heading: 1.2;
+  --weight-regular: 400;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+
+  /* colors */
   --black: #000000;
   --background: #333;
+  --color-text: #fff;
+  --color-text-muted: #c9ced6;
+  --color-text-heading: var(--color-text); /* define this */
+
+  /* Spacing (rem for scalability) */
+  --space-xxs: 0.25rem; /* 4px */
+  --space-xs: 0.5rem; /* 8px */
+  --space-sm: 0.75rem; /* 12px */
+  --space-md: 1.25rem; /* 20px */
+  --space-lg: 2rem; /* 32px */
+  --space-xl: 3.25rem; /* 52px */
+  --space-xxl: 5.25rem; /* 84px */
 }
 
 * {
@@ -14,5 +46,52 @@
 }
 
 body {
+  font-family: var(--font-base);
   background-color: var(--background);
+  color: var(--color-text);
+  font-size: var(--text-base); /* fix undefined var */
+  line-height: var(--leading-body);
+  font-weight: var(--weight-regular);
+}
+
+/* Headings */
+h1,
+h2,
+h3,
+h4,
+form legend {
+  color: var(--color-text-heading);
+  line-height: var(--leading-heading); /* fix undefined var */
+  margin-bottom: var(--space-xs);
+  font-weight: var(--weight-bold);
+}
+
+/* Recommended larger default hierarchy */
+h1,
+.text--xxl {
+  font-size: var(--text-4xl);
+}
+h2,
+.text--xl {
+  font-size: var(--text-3xl);
+}
+h3,
+.text--lg {
+  font-size: var(--text-2xl);
+}
+h4,
+.text--md {
+  font-size: var(--text-xl);
+}
+
+/* Body-size utilities */
+.text--base {
+  font-size: var(--text-base);
+}
+.text--sm,
+small {
+  font-size: var(--text-sm);
+}
+.text--xs {
+  font-size: var(--text-xs);
 }

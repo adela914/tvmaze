@@ -19,7 +19,6 @@ export const useShowsStore = defineStore('shows', () => {
   const fetchShows = async () => {
     isLoading.value = true
     error.value = null
-
     try {
       const fetchedShows: TVMazeShow[] = await getShows(currentPage.value)
       shows.value = [...shows.value, ...fetchedShows]

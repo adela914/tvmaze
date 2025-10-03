@@ -58,7 +58,7 @@ const loadMoreData = async () => {
   <!-- Only render non-empty groups-->
   <main>
     <SearchResultBlock v-if="searchShowsStore.searchInput" />
-    <template v-else>
+    <div v-else class="carousels">
       <template v-for="(value, key) in groupedByGenre">
         <BaseCrousel
           :key="key"
@@ -70,12 +70,18 @@ const loadMoreData = async () => {
           @loadMore="loadMoreData"
         />
       </template>
-    </template>
+    </div>
   </main>
 </template>
 
 <style scoped>
 main {
-  margin: 40px;
+  margin: var(--space-lg);
+}
+
+.carousels {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
 }
 </style>

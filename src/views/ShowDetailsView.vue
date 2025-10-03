@@ -14,7 +14,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <main v-if="showData" class="hero">
+  <main v-if="showData && !showDetailsStore.isLoading" class="hero">
     <!-- backdrop -->
     <div
       class="backdrop"
@@ -24,7 +24,7 @@ onMounted(() => {
     <div class="overlay">
       <!-- poster -->
       <div class="poster">
-        <img :src="showData?.image?.medium" :alt="showData?.name" />
+        <img class="image" :src="showData?.image?.medium" :alt="showData?.name" />
       </div>
 
       <!-- details -->
@@ -50,7 +50,7 @@ onMounted(() => {
 <style scoped>
 .hero {
   position: relative;
-  color: #fff;
+  color: var(--color-text);
   min-height: 100vh;
   display: flex;
   align-items: center;
@@ -80,6 +80,12 @@ onMounted(() => {
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .details {

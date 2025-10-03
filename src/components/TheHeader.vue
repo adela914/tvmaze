@@ -24,7 +24,7 @@ const onInputUpdate = (input: string) => {
 <style scoped>
 .header {
   background: #222;
-  color: #fff;
+  color: var(--color-text);
   padding: 1rem 0;
 }
 
