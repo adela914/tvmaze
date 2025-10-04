@@ -1,9 +1,9 @@
-import { render, screen, waitFor } from '@testing-library/vue'
+import { render, screen } from '@testing-library/vue'
 import userEvent from '@testing-library/user-event'
 import { createTestingPinia } from '@pinia/testing'
 import { vi, describe, it, expect, beforeEach } from 'vitest'
-import { resetShowsRequestCount, server, http, HttpResponse } from '@/tests/mswServer'
-import HomeView from '@/views/HomeView.vue'
+import { resetShowsRequestCount } from '@/tests/mswServer'
+import HomePage from '@/views/HomePage.vue'
 import type { TVMazeShow } from '@/types/TVMazeShow'
 
 // router mock: define inline to avoid "Cannot access before init"
@@ -38,7 +38,7 @@ const renderPage = (
       searchShowsStore: { searchInput: state?.searchInput ?? '' },
     },
   })
-  return render(HomeView, {
+  return render(HomePage, {
     global: {
       plugins: [pinia],
       stubs: {
@@ -50,7 +50,7 @@ const renderPage = (
   })
 }
 
-describe('HomePage.vue', () => {
+describe('HomePage', () => {
   beforeEach(() => {
     resetShowsRequestCount()
   })

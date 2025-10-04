@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import BaseInput from '@/components/BaseInput.vue'
 import { useShowSearchStore } from '@/stores/searchShowsStore'
-import { debounce } from '@/utils'
+import { debounce } from '@/utils/debouncer'
 
 const searchStore = useShowSearchStore()
 
