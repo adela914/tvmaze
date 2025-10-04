@@ -37,7 +37,7 @@ const onShowClicked = (id: number) => {
   border-radius: var(--border-radius-md);
   object-fit: cover;
   width: 100%;
-  height: auto;
   max-width: 250px;
+  cursor: pointer;
 }
 </style>

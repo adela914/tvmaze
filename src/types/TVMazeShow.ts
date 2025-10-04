@@ -15,7 +15,7 @@ export type TVMazeShow = {
   rating: Rating
   weight: number
   network: Network
-  webChannel: string | null
+  webChannel: WebChannel | null
   dvdCountry: Country | null
   externals: Externals
   image?: Image
@@ -24,13 +24,24 @@ export type TVMazeShow = {
   _links: Links
 }
 
+export type WebChannel = {
+  id: number
+  name: string
+  country: {
+    name: string
+    code: string
+    timezone: string
+  }
+  officialSite: string
+}
+
 export type Schedule = {
   time: string
   days: string[]
 }
 
 export type Rating = {
-  average: number
+  average: number | null
 }
 
 export type Country = {
@@ -43,7 +54,7 @@ export type Network = {
   id: number
   name: string
   country: Country
-  officialSite: string
+  officialSite: string | null
 }
 
 export type Externals = {
@@ -59,6 +70,7 @@ export type Image = {
 
 export type Self = {
   href: string
+  name?: string
 }
 
 export type Links = {

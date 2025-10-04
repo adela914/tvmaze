@@ -23,7 +23,9 @@
     "vue-router": "^4.5.1"
   },
   "devDependencies": {
+    "@pinia/testing": "^1.0.2",
     "@playwright/test": "^1.54.1",
+    "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/user-event": "^14.6.1",
     "@testing-library/vue": "^8.1.0",
     "@tsconfig/node22": "^22.0.2",
@@ -40,6 +42,7 @@
     "eslint-plugin-vue": "~10.3.0",
     "jiti": "^2.4.2",
     "jsdom": "^26.1.0",
+    "msw": "^2.11.3",
     "npm-run-all2": "^8.0.4",
     "prettier": "3.6.2",
     "typescript": "~5.8.0",

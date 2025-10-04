@@ -15,7 +15,7 @@ export const useShowsStore = defineStore('shows', () => {
   const shows = ref<TVMazeShow[]>([])
   const isLoading = ref(false)
   const error = ref<string | null>(null)
-  const currentPage = ref(1)
+  const currentPage = ref(0)
 
   const fetchShows = async () => {
     isLoading.value = true
@@ -30,7 +30,6 @@ export const useShowsStore = defineStore('shows', () => {
       console.error('Error fetching tasks:', err)
 
       toastStore.show(error.value)
-      throw err
     } finally {
       isLoading.value = false
     }
