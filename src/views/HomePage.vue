@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted } from 'vue'
 import { TVMAZE_GENRES } from '@/constants'
-import BaseCrousel, { type Slide } from '@/components/BaseCarousel.vue'
+import BaseCarousel, { type Slide } from '@/components/BaseCarousel.vue'
 import { useShowsStore } from '@/stores/showsListStore'
 import router from '@/router'
 import TheHeader from '@/components/TheHeader.vue'
@@ -59,7 +59,7 @@ const loadMoreData = async () => {
     <SearchResultBlock v-if="searchShowsStore.searchInput" />
     <div v-else class="carousels">
       <template v-for="(value, key) in groupedByGenre">
-        <BaseCrousel
+        <BaseCarousel
           :key="key"
           v-if="value.length"
           :header="key"
