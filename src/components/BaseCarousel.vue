@@ -10,9 +10,7 @@ export interface Slide {
 
 interface BaseCarouselProps {
   slides: Slide[]
-  /** Fixed number of items per page (disables responsive behavior if provided) */
   perPage?: number
-  /** Responsive rules sorted by minWidth ascending; falls back to DEFAULT_BREAKPOINTS */
   breakpoints?: Breakpoint[]
   header: string
   isLoading: boolean
@@ -64,7 +62,7 @@ onBeforeUnmount(() => {
   }
 })
 
-// compute responsive perPage (or respect fixed prop)
+// compute responsive perPage
 const effectivePerPage = computed(() => {
   if (props.perPage != null) return Math.max(1, props.perPage)
   const rules = (props.breakpoints?.length ? props.breakpoints : DEFAULT_BREAKPOINTS)
@@ -222,6 +220,7 @@ watch([() => slides.value.length, () => props.isLoading], ([len, loading]) => {
   cursor: pointer;
 }
 
+/* grey out the images when it is loading */
 .slide-img.isLoading {
   filter: grayscale(100%) brightness(80%);
   opacity: 0.6;
@@ -243,7 +242,7 @@ watch([() => slides.value.length, () => props.isLoading], ([len, loading]) => {
   line-height: 38px;
   text-align: center;
   font-size: 24px;
-  border-radius: 9999px; /* unique radius for naviataion buttons */
+  border-radius: 9999px; /* unique radius for navigation buttons */
   cursor: pointer;
   user-select: none;
 }

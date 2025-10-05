@@ -1,3 +1,9 @@
+/**
+ * Smoke E2E tests:
+ * These are intentionally limited to demonstrate approach and verify the critical user path.
+ * Full regression coverage is out of scope for this assignment.
+ */
+
 import { test, expect } from '@playwright/test'
 
 test.beforeEach(async ({ page }) => {

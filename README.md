@@ -1,18 +1,79 @@
-# tvmaze
+# TVMaze
 
-This template should help get you started developing with Vue 3 in Vite.
+This app lets you browse TV shows in a simple, friendly way. On the home page, shows are grouped by genre and you can slide through each group. There’s a search box in the header—start typing and you’ll immediately see matching results. Click any show to open its detail page. Short on-screen toasters appear when something needs your attention. It’s designed to feel quick, clear, and easy to use.
+
+## Architecture decisions
+
+- **Vue 3 + Vite + TypeScript** — Modern SFCs and Composition API with fast HMR and build times from Vite, plus TypeScript for safer refactors and better IDE support
+- **Pinia** — Official Vue 3 store: minimal boilerplate, great TypeScript inference, and easy-to-test modular stores that keep view logic thin
+- **Vue Router** — Declarative, first-class navigation (named routes, params, guards) and simple programmatic navigation from components
+- **Minimal scaffolding & dependencies (per assignment)** — Kept the stack vanilla to showcase my own implementation and keep the bundle lean
+  - No UI kits (e.g., PrimeVue, Vuetify, Tailwind) or component libraries
+  - No utility libraries (e.g., Lodash); implemented a small custom `debounce`
+  - Base components (Carousel, Input, Toaster) are hand-rolled and reusable, with no embedded business logic
+  - Reusable CSS variables in `main.css` for spacing, colors, and styles.
+- **Testing stack: Vitest + Vue Testing Library + MSW + Playwright**
+  - **Vitest** for fast unit/integration runs with TypeScript.
+  - **Vue Testing Library** to assert user-visible behavior (roles, text) rather than implementation details.
+  - **MSW** to mock HTTP at the boundary for deterministic integration tests.
+  - **Playwright** for smoke E2E against the real API to validate the critical path.
+- **Conventions** — Follows Vue’s official [Style Guide](https://vuejs.org/style-guide/) for naming, structure, and component patterns.
+
+## State management
+
+### Stores & responsibilities
+
+- **`showsListStore`** — catalog list + pagination
+  - **state:** `shows`, `page`, `isLoading`, `error`
+  - **actions:** `fetchShows()` appends next page; guards concurrent calls
+
+- **`searchShowsStore`** — search query + results (ephemeral server state surfaced to the UI)
+  - **state:** `searchInput`, `searchResults`
+  - **actions:** `findShows()` executes the current query; the header triggers it via a **400 ms debounce**
+  - **behavior:** when `searchInput` is truthy, the Home view switches from carousels to the search results block
+
+- **`showDetailsStore`** — details for a single show
+  - **state:** `showDetails`, `isLoading`, `error`
+  - **actions:** `fetchShowById(id)`; uses `showsListStore` cache (`showsObjectById`) first, else fetches; on error sets `error` and shows a toast
+
+- **`toast`** — transient UI feedback
+  - **state:** `toasts: { id, message, type }[]`
+  - **actions:** `show(msg, type = 'error', duration)` with auto-dismiss
+
+### Scaling note: server vs. client state
+
+For a larger app:
+
+- **Server state → TanStack Query (Vue Query):** caching, deduped requests, pagination/infinite scroll, retries, background refetch, optional SSR hydration
+- **Client/global state → Pinia (minimal):** only true app-level state (auth/session, feature flags, theme, toasts, small UI flags)
+
+## Testing scope
+
+This repository includes:
+
+- **Unit & integration tests** (Vitest + Vue Testing Library + Pinia + MSW) covering the main behaviors: fetching, grouping by genre, pagination (“load more”), navigation, search, and store logic. Network calls are mocked with MSW for determinism.
+- **E2E tests** (Playwright) at **smoke** level. They demonstrate the approach and validate the critical happy path (home loads → click a show → navigate; header search toggle). For this assignment, the tests hit the **live TVMaze API**; in a real application, E2E would target a **dedicated test/staging API** or use **MSW** in the browser for determinism and isolation.
+
+**Future E2E additions** (out of scope here, but planned in a real project):
+
+- Error-state UIs (network failures, empty states)
+- Accessibility flows (keyboard nav across components)
+- Deeper search result interactions
+- Visual/trace capture on failures
+
+## Requirements
+
+- **Node.js:** 24.x (tested with **v24.9.0**)
+- **npm:** 11.x (tested with **11.6.0**)
+
+```bash
+node -v   # v24.9.0
+npm  -v   # 11.6.0
+```
 
 ## Recommended IDE Setup
 
 [VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
-
-## Type Support for `.vue` Imports in TS
-
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vite.dev/config/).
 
 ## Project Setup
 
@@ -61,39 +122,4 @@ npm run test:e2e -- --debug
 
 ```sh
 npm run lint
-```
-
-###
-
-State management using composables
-
-- write that genres are from the doc here - https://www.tvmaze.com/faq/32/genre-definitions
-
-- Reusable
-- Clean
-- No library possible
-- Add unit tests, and e2e tests using playwright
-- Responsive
-- Add Cacheing mechanism
-- Add accessibility test results and lighthouse performance result
-  https://vueschool.io/articles/vuejs-tutorials/how-to-structure-a-large-scale-vue-js-application/
-
-### State management
-
-### Usage of base components
-
-```
-BaseInput.vue
-
-<!-- With label (slot) -->
-<BaseInput v-model="email" type="email" name="email" autocomplete="email" placeholder="you@example.com">
-  Email
-</BaseInput>
-
-<!-- Without label: provide aria-label -->
-<BaseInput v-model="q" placeholder="Search…" aria-label="Search" />
-
-<!-- Need numbers? Use the modifier at call site -->
-
-<BaseInput v-model.number="age" type="number">Age</BaseInput>
 ```

@@ -3,7 +3,6 @@ import { http, HttpResponse } from 'msw'
 import { BASE_API_URL } from '@/constants'
 import { page0, page1 } from './mockData'
 
-// track how many requests (handy for “load more”)
 export let getShowsRequestCount = 0
 export const resetShowsRequestCount = () => {
   getShowsRequestCount = 0

@@ -6,7 +6,6 @@ import { resetShowsRequestCount } from '@/tests/mswServer'
 import HomePage from '@/views/HomePage.vue'
 import type { TVMazeShow } from '@/types/TVMazeShow'
 
-// router mock: define inline to avoid "Cannot access before init"
 vi.mock('@/router', () => ({ default: { push: vi.fn() } }))
 import router from '@/router'
 

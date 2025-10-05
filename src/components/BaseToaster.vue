@@ -1,4 +1,3 @@
-<!-- src/components/Toaster.vue -->
 <template>
   <div class="toaster" role="status" aria-live="polite">
     <div v-for="t in toasts" :key="t.id" class="toast" :class="t.type">
@@ -25,17 +24,15 @@ const { toasts } = storeToRefs(useToastStore())
   z-index: 9999;
 }
 
-/* keep your existing toast styles; tweak entrance to rise up from bottom */
 .toast {
   min-width: 220px;
   max-width: 360px;
   padding: var(--space-xs) var(--space-sm);
   border-radius: var(--border-radius-sm);
-  color: #fff;
+  color: var(--color-text);
   background: #2c2c2c;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   cursor: pointer;
-
   opacity: 0;
   transform: translateY(6px);
   animation: fade-up 0.2s ease forwards;
@@ -49,12 +46,12 @@ const { toasts } = storeToRefs(useToastStore())
 }
 
 .toast.info {
-  background: #2d7ef7;
+  background: var(--color-toast-info);
 }
 .toast.success {
-  background: #22c55e;
+  background: var(--color-toast-success);
 }
 .toast.error {
-  background: #ef4444;
+  background: var(--color-toast-error);
 }
 </style>

@@ -29,7 +29,7 @@ const onInputUpdate = (input: string) => {
 
 <style scoped>
 .header {
-  background: var(--black);
+  background: var(--color-black);
   color: var(--color-text);
   padding: var(--space-sm);
 }
