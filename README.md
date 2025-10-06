@@ -1,11 +1,11 @@
 # TVMaze
 
-This app lets you browse TV shows in a simple, friendly way.The home page groups shows by genre and presents each group in a horizontal carousel. Results are globally sorted by rating (highest first), and more shows load seamlessly as you paginate. A header search provides instant, inline results. Click any show to open its detail page. Lightweight toast notifications surface errors. The UI is designed to be quick, clear, and easy to use.
+This app lets you browse TV shows in a simple, friendly way. The home page groups shows by genre and presents each group in a horizontal carousel. Results are globally sorted by rating (highest first), and more shows load seamlessly as you paginate. A header search provides instant, inline results. Click any show to open its detail page. Lightweight toast notifications surface errors. The UI is designed to be quick, clear, and easy to use.
 
 ## Architecture decisions
 
 - **Vue 3 + Vite + TypeScript** — Modern SFCs and Composition API with fast HMR and build times from Vite, plus TypeScript for safer refactors and better IDE support
-- **Pinia** — Official Vue 3 store: minimal boilerplate, great TypeScript inference, and easy-to-test modular stores that keep view logic thin
+- **Pinia** — Official Vue 3 store: minimal boilerplate, great TypeScript inference, and easy-to-test modular stores that sharing state across components makes easier
 - **Vue Router** — Declarative, first-class navigation (named routes, params, guards) and simple programmatic navigation from components
 - **Minimal scaffolding & dependencies (per assignment)** — Kept the stack vanilla to showcase my own implementation and keep the bundle lean
   - No UI kits (e.g., PrimeVue, Vuetify, Tailwind) or component libraries
@@ -23,11 +23,11 @@ This app lets you browse TV shows in a simple, friendly way.The home page groups
 
 ### Stores & responsibilities
 
-- **`showsListStore`** — catalog list + pagination
+- **`showsListStore`** — TV shows list + pagination
   - **state:** `shows`, `page`, `isLoading`, `error`
   - **actions:** `fetchShows()` appends next page; guards concurrent calls
 
-- **`searchShowsStore`** — search query + results (ephemeral server state surfaced to the UI)
+- **`searchShowsStore`** — search query + results
   - **state:** `searchInput`, `searchResults`
   - **actions:** `findShows()` executes the current query; the header triggers it via a **400 ms debounce**
   - **behavior:** when `searchInput` is truthy, the Home view switches from carousels to the search results block
