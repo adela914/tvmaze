@@ -7,15 +7,15 @@ import router from '@/router'
 import TheHeader from '@/components/TheHeader.vue'
 import { useShowSearchStore } from '@/stores/searchShowsStore'
 import SearchResultBlock from '@/components/SearchResultBlock.vue'
+import type { TVMazeGenre } from '@/types/TVMazeShow'
 
-type TVMazeGenre = (typeof TVMAZE_GENRES)[number]
 type FormattedShow = Slide
 type GroupedByGenre = Record<TVMazeGenre, FormattedShow[]>
 
 const showsStore = useShowsStore()
 const searchShowsStore = useShowSearchStore()
 
-const createGroupedByGenre = (): GroupedByGenre => {
+const createGroupedByGenre = () => {
   return Object.fromEntries(TVMAZE_GENRES.map((g) => [g, [] as FormattedShow[]])) as GroupedByGenre
 }
 
@@ -36,8 +36,8 @@ const groupedByGenre = computed<GroupedByGenre>(() => {
   // Build per-genre groups using the already-sorted order
   for (const show of sorted) {
     for (const genre of show.genres) {
-      if ((TVMAZE_GENRES as readonly string[]).includes(genre)) {
-        grouped[genre as TVMazeGenre].push({
+      if (TVMAZE_GENRES.includes(genre)) {
+        grouped[genre].push({
           id: show.id,
           alt: show.name,
           img: show.image,

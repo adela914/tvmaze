@@ -1,10 +1,12 @@
+import type { TVMAZE_GENRES } from '@/constants'
+
 export type TVMazeShow = {
   id: number
   url: string
   name: string
   type: string
   language: string
-  genres: string[]
+  genres: TVMazeGenre[]
   status: string
   runtime: number
   averageRuntime: number
@@ -23,6 +25,8 @@ export type TVMazeShow = {
   updated: number
   _links: Links
 }
+
+export type TVMazeGenre = (typeof TVMAZE_GENRES)[number]
 
 export type WebChannel = {
   id: number
