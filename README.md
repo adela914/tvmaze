@@ -1,6 +1,6 @@
 # TVMaze
 
-This app lets you browse TV shows in a simple, friendly way. On the home page, shows are grouped by genre and you can slide through each group. There’s a search box in the header—start typing and you’ll immediately see matching results. Click any show to open its detail page. Short on-screen toasters appear when something needs your attention. It’s designed to feel quick, clear, and easy to use.
+This app lets you browse TV shows in a simple, friendly way.The home page groups shows by genre and presents each group in a horizontal carousel. Results are globally sorted by rating (highest first), and more shows load seamlessly as you paginate. A header search provides instant, inline results. Click any show to open its detail page. Lightweight toast notifications surface errors. The UI is designed to be quick, clear, and easy to use.
 
 ## Architecture decisions
 
