@@ -13,6 +13,10 @@
   --text-xl: clamp(1.5rem, 1.3rem + 1vw, 1.875rem);
   --text-2xl: clamp(1.875rem, 1.6rem + 1.4vw, 2.25rem);
 
+  /* Font weight */
+  --weight-regular: 400;
+  --weight-bold: 600;
+
   /* colors */
   --color-black: #000000;
   --color-background: #333;

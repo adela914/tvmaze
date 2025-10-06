@@ -19,6 +19,7 @@ const onInputUpdate = (input: string) => {
       <BaseInput
         class="input-wrapper"
         input-id="searchInput"
+        :model-value="searchStore.searchInput"
         @update:model-value="onInputUpdate"
         placeholder="Search..."
       />

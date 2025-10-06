@@ -10,8 +10,8 @@ vi.mock('@/router', () => ({ default: { push: vi.fn() } }))
 import router from '@/router'
 
 // Light stubs: minimal visible DOM + emits for user-like queries
-const BaseCrouselStub = {
-  name: 'BaseCrousel',
+const BaseCarouselStub = {
+  name: 'BaseCarousel',
   props: ['header', 'slides', 'isLoading'],
   emits: ['onImageClick', 'loadMore'],
   template: `
@@ -41,7 +41,7 @@ const renderPage = (
     global: {
       plugins: [pinia],
       stubs: {
-        BaseCrousel: BaseCrouselStub,
+        BaseCarousel: BaseCarouselStub,
         SearchResultBlock: SearchResultBlockStub,
         TheHeader: TheHeaderStub,
       },

@@ -20,24 +20,36 @@ const createGroupedByGenre = (): GroupedByGenre => {
 }
 
 const groupedByGenre = computed<GroupedByGenre>(() => {
-  const groupedShows = createGroupedByGenre()
+  const grouped = createGroupedByGenre()
 
-  showsStore.shows.forEach((show) => {
-    show.genres.forEach((genre) => {
+  // Make a non-mutating, globally sorted copy by rating (desc)
+  // Treat null/undefined ratings as -Infinity so the comparator is numeric and stable
+  const sorted = [...showsStore.shows].sort((a, b) => {
+    const ra = typeof a?.rating?.average === 'number' ? a.rating.average : -Infinity
+    const rb = typeof b?.rating?.average === 'number' ? b.rating.average : -Infinity
+    if (rb !== ra) return rb - ra
+    // Tiebreakers for stable order across pages
+    if (a.id !== b.id) return a.id - b.id
+    return (a.name || '').localeCompare(b.name || '')
+  })
+
+  // Build per-genre groups using the already-sorted order
+  for (const show of sorted) {
+    for (const genre of show.genres) {
       if ((TVMAZE_GENRES as readonly string[]).includes(genre)) {
-        groupedShows[genre as TVMazeGenre].push({
+        grouped[genre as TVMazeGenre].push({
           id: show.id,
           alt: show.name,
           img: show.image,
         })
       }
-    })
-  })
+    }
+  }
 
-  return groupedShows
+  return grouped
 })
 
-const onShowClicked = (id: string) => {
+const onShowClicked = (id: number) => {
   router.push({ name: 'show', params: { id } })
 }
 
@@ -58,9 +70,8 @@ const loadMoreData = async () => {
   <main>
     <SearchResultBlock v-if="searchShowsStore.searchInput" />
     <div v-else class="carousels">
-      <template v-for="(value, key) in groupedByGenre">
+      <template v-for="(value, key) in groupedByGenre" :key="key">
         <BaseCarousel
-          :key="key"
           v-if="value.length"
           :header="key"
           :slides="value"

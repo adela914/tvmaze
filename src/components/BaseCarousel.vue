@@ -18,17 +18,18 @@ interface BaseCarouselProps {
 
 type Breakpoint = { minWidth: number; perPage: number }
 
-const DEFAULT_BREAKPOINTS: Breakpoint[] = [
-  { minWidth: 0, perPage: 1 },
-  { minWidth: 480, perPage: 2 },
-  { minWidth: 768, perPage: 3 },
-  { minWidth: 1024, perPage: 5 },
-  { minWidth: 1280, perPage: 6 },
-]
-
-const props = defineProps<BaseCarouselProps>()
-
-const slides = computed(() => props.slides)
+const {
+  breakpoints = [
+    { minWidth: 0, perPage: 1 },
+    { minWidth: 480, perPage: 2 },
+    { minWidth: 768, perPage: 3 },
+    { minWidth: 1024, perPage: 5 },
+    { minWidth: 1280, perPage: 6 },
+  ],
+  slides,
+  perPage,
+  isLoading,
+} = defineProps<BaseCarouselProps>()
 
 // unique ids for a11y wiring
 const uid = getCurrentInstance()?.uid ?? Math.floor(Math.random() * 1e9)
@@ -64,10 +65,8 @@ onBeforeUnmount(() => {
 
 // compute responsive perPage
 const effectivePerPage = computed(() => {
-  if (props.perPage != null) return Math.max(1, props.perPage)
-  const rules = (props.breakpoints?.length ? props.breakpoints : DEFAULT_BREAKPOINTS)
-    .slice()
-    .sort((a, b) => a.minWidth - b.minWidth)
+  if (perPage != null) return Math.max(1, perPage)
+  const rules = breakpoints.slice().sort((a, b) => a.minWidth - b.minWidth)
   let p = 1
   for (const r of rules) {
     if (vw.value >= r.minWidth) p = Math.max(1, r.perPage)
@@ -78,23 +77,33 @@ const effectivePerPage = computed(() => {
 // slide width and paging
 const itemWidthPct = computed(() => 100 / effectivePerPage.value)
 const current = ref(0)
-const maxIndex = computed(() => Math.max(0, slides.value.length - effectivePerPage.value))
+const maxIndex = computed(() => Math.max(0, slides.length - effectivePerPage.value))
 
 // translate by full viewport width per "page"
 const offsetPx = computed(() => {
-  if (slides.value.length <= effectivePerPage.value) return 0
+  if (slides.length <= effectivePerPage.value) return 0
   return (current.value / effectivePerPage.value) * vw.value
 })
 
 const advanceAfterLoad = ref(false)
-const lastLen = ref(slides.value.length)
+const lastLen = ref(slides.length)
+const rightmostIdBeforeLoad = ref<number | null>(null)
+
+const getRightmostVisibleIndex = () => {
+  return Math.min(current.value + effectivePerPage.value - 1, slides.length - 1)
+}
+const getRightmostVisibleId = () => {
+  const idx = getRightmostVisibleIndex()
+  return idx >= 0 ? (slides[idx]?.id ?? null) : null
+}
 
 const next = () => {
   if (current.value < maxIndex.value) {
     current.value = Math.min(current.value + effectivePerPage.value, maxIndex.value)
     return
   }
-  // at end → ask parent for more and remember to advance after it lands
+  // at end → remember where we were and ask parent for more
+  rightmostIdBeforeLoad.value = getRightmostVisibleId()
   advanceAfterLoad.value = true
   emit('loadMore')
 }
@@ -103,14 +112,32 @@ const prev = () => {
 }
 
 // keep index valid when inputs change
-watch([slides, effectivePerPage], () => {
+watch([() => slides, effectivePerPage], () => {
   if (current.value > maxIndex.value) current.value = maxIndex.value
 })
 
-watch([() => slides.value.length, () => props.isLoading], ([len, loading]) => {
-  // only act when we were waiting, loading finished, and we actually got more items
+// After data length changes / loading ends, reposition based on anchor ID
+watch([() => slides.length, () => isLoading], ([len, loading]) => {
   if (advanceAfterLoad.value && !loading && len > lastLen.value) {
-    current.value = Math.min(current.value + effectivePerPage.value, maxIndex.value)
+    const anchorId = rightmostIdBeforeLoad.value
+    if (anchorId != null) {
+      const newIdx = slides.findIndex((s) => s.id === anchorId)
+      // If anchor vanished, fallback to old behavior
+      if (newIdx >= 0) {
+        // Move to the page that starts immediately AFTER the anchor
+        const afterAnchor = Math.min(newIdx + 1, slides.length - 1)
+        const pageStart = Math.min(
+          Math.floor(afterAnchor / effectivePerPage.value) * effectivePerPage.value,
+          maxIndex.value,
+        )
+        current.value = pageStart
+      } else {
+        current.value = Math.min(current.value + effectivePerPage.value, maxIndex.value)
+      }
+    } else {
+      current.value = Math.min(current.value + effectivePerPage.value, maxIndex.value)
+    }
+    rightmostIdBeforeLoad.value = null
     advanceAfterLoad.value = false
   }
   lastLen.value = len

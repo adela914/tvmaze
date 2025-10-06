@@ -56,10 +56,15 @@ This repository includes:
 
 **Future E2E additions** (out of scope here, but planned in a real project):
 
+- Full cover of tests, both for happy and unhappy paths
 - Error-state UIs (network failures, empty states)
 - Accessibility flows (keyboard nav across components)
 - Deeper search result interactions
 - Visual/trace capture on failures
+
+## Notes
+
+Since this application was built for a coding assignment, I focused on meeting the given requirements as closely as possible. For features like sorting, however, in a real-world scenario I would typically coordinate with the backend team to implement a sorting query on the API side, rather than performing all computations in the frontend.
 
 ## Requirements
 
