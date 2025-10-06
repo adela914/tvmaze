@@ -58,8 +58,7 @@ This repository includes:
 
 - Full cover of tests, both for happy and unhappy paths
 - Error-state UIs (network failures, empty states)
-- Accessibility flows (keyboard nav across components)
-- Deeper search result interactions
+- Accessibility tests using for example @axe-core/playwright
 - Visual/trace capture on failures
 
 ## Notes
