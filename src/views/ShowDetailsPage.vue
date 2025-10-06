@@ -98,7 +98,7 @@ onMounted(() => {
 }
 
 .meta {
-  color: #ddd;
+  color: var(--color-meta);
   font-size: var(--text-base);
 }
 

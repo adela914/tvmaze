@@ -26,6 +26,7 @@
   --color-toast-info: #2d7ef7;
   --color-toast-success: #22c55e;
   --color-toast-error: #ef4444;
+  --color-meta: #ddd;
 
   /* Spacing (rem for scalability) */
   --space-xxs: 0.25rem; /* 4px */

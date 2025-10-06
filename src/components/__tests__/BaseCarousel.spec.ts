@@ -48,21 +48,21 @@ describe('BaseCarousel', () => {
       props: { header: 'Drama', slides, isLoading: false, perPage: 2 },
     })
 
-    // Focus the carousel region
+    //focus the carousel region
     const region = screen.getByRole('region', { name: /drama/i })
     region.focus()
     expect(region).toHaveFocus()
 
-    // 1st Right: advance to last page -> "Previous" should now be enabled
+    //advance to last page -> previous button should now be enabled
     await user.keyboard('{ArrowRight}')
     expect(screen.getByRole('button', { name: /previous/i })).not.toBeDisabled()
 
-    // 2nd Right: we are at the end -> should request more (emit loadMore)
+    //should request more (emit loadMore)
     await user.keyboard('{ArrowRight}')
     expect(emitted().loadMore).toBeTruthy()
     expect(emitted().loadMore).toHaveLength(1)
 
-    // Optional: go back to start with Left keys; "Previous" becomes disabled at index 0
+    //previous button becomes disabled at index 0
     await user.keyboard('{ArrowLeft}{ArrowLeft}')
     expect(screen.getByRole('button', { name: /previous/i })).toBeDisabled()
   })

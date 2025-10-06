@@ -9,14 +9,13 @@ import { useShowSearchStore } from '@/stores/searchShowsStore'
 import SearchResultBlock from '@/components/SearchResultBlock.vue'
 import type { TVMazeGenre } from '@/types/TVMazeShow'
 
-type FormattedShow = Slide
-type GroupedByGenre = Record<TVMazeGenre, FormattedShow[]>
+type GroupedByGenre = Record<TVMazeGenre, Slide[]>
 
 const showsStore = useShowsStore()
 const searchShowsStore = useShowSearchStore()
 
 const createGroupedByGenre = () => {
-  return Object.fromEntries(TVMAZE_GENRES.map((g) => [g, [] as FormattedShow[]])) as GroupedByGenre
+  return Object.fromEntries(TVMAZE_GENRES.map((g) => [g, [] as Slide[]])) as GroupedByGenre
 }
 
 const groupedByGenre = computed<GroupedByGenre>(() => {

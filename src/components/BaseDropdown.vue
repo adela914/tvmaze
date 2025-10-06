@@ -1,4 +1,4 @@
-<!-- Work in progress -->
+<!-- Work in progress for filtering features-->
 <script setup lang="ts">
 interface BaseDropdownProps {
   id: string

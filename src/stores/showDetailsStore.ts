@@ -18,7 +18,7 @@ export const useShowDetailsStore = defineStore('showDetailsStore', () => {
     const storedData = loadedShows.showsObjectById[id]
 
     if (storedData) {
-      // set stored data from shows list if it exisits
+      // set stored data from shows list if it exists
       showDetails.value = storedData
     } else {
       // otherwise fetch it by id
